@@ -8631,3 +8631,50 @@ h2 span {
     padding: 6px 12px;
   }
 }
+
+/* ── Google Merchant Center / Top Quality Store Trust Badges ── */
+.merchant-trust-badges {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 18px;
+  padding: 16px;
+  background: #ffffff;
+  border: 1px solid #e8dfd5;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(56, 37, 29, 0.04);
+}
+
+.merchant-badge-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.merchant-badge-item .badge-icon {
+  font-size: 18px;
+  line-height: 1;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.merchant-badge-item .badge-text strong {
+  display: block;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--ink);
+  font-family: 'Manrope', sans-serif;
+}
+
+.merchant-badge-item .badge-text span {
+  display: block;
+  font-size: 11.5px;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+/* AEO Answer Block Enhancement */
+.aeo-answer-block {
+  border-left: 4px solid var(--gold) !important;
+  background: linear-gradient(135deg, #fdfbf7 0%, #f6efe3 100%) !important;
+}

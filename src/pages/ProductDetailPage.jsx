@@ -123,11 +123,36 @@ export default function ProductDetailPage() {
               <div className="product-image-card">
                 <ImageWithSkeleton
                   src={product.image}
-                  alt={product.name}
+                  alt={`${product.name} - Certified High Purity Attapulgite Clay Mineral by Bentoclay Claytech`}
                   className="product-main-photo"
                 />
                 <div className="photo-caption-badge">
                   <span>{product.type.toUpperCase()}</span> · <b>{product.form.toUpperCase()}</b>
+                </div>
+              </div>
+
+              {/* Merchant Store Trust Badges */}
+              <div className="merchant-trust-badges">
+                <div className="merchant-badge-item">
+                  <span className="badge-icon">⭐</span>
+                  <div className="badge-text">
+                    <strong>Top Quality Store & Direct Manufacturer</strong>
+                    <span>ISO 9001:2015 & API-13A Quality Laboratory Certified</span>
+                  </div>
+                </div>
+                <div className="merchant-badge-item">
+                  <span className="badge-icon">🚢</span>
+                  <div className="badge-text">
+                    <strong>Worldwide Container Export</strong>
+                    <span>Direct dispatch from Mundra & Pipavav Ports (FOB/CIF)</span>
+                  </div>
+                </div>
+                <div className="merchant-badge-item">
+                  <span className="badge-icon">🛡️</span>
+                  <div className="badge-text">
+                    <strong>100% Quality Assurance Guarantee</strong>
+                    <span>Full Certificate of Analysis (COA) issued with every lot</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -140,18 +165,18 @@ export default function ProductDetailPage() {
         <div className="container product-body-grid">
           {/* Main Column */}
           <div className="product-main-col">
-            {/* In Short Box */}
+            {/* In Short AEO Answer Box */}
             {product.inShort && (
-              <div className="in-short-box">
-                <span className="in-short-eyebrow">IN SHORT</span>
-                <p>{product.inShort}</p>
+              <div className="in-short-box aeo-answer-block">
+                <span className="in-short-eyebrow">DIRECT SPECIFICATION SUMMARY</span>
+                <p><strong>{product.name}</strong>: {product.inShort}</p>
               </div>
             )}
 
             {/* Technical Overview */}
             {product.overview && product.overview.length > 0 && (
               <div className="tech-overview-block">
-                <h2>Technical overview</h2>
+                <h2>{product.name} Technical Overview & Mineralogy</h2>
                 <div className="prose-content">
                   {product.overview.map((para, i) => (
                     <p key={i}>{para}</p>
@@ -162,7 +187,7 @@ export default function ProductDetailPage() {
 
             {/* Physical & Chemical Parameters */}
             <div className="tech-specs-block">
-              <h2>{product.shortName} physical parameters</h2>
+              <h2>{product.name} Physical Parameters & Certified Requirements</h2>
               <div className="table-responsive">
                 <table className="spec-table-detail">
                   <thead>
