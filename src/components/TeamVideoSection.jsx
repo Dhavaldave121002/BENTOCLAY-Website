@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 
 const VIDEO_LIST = [
   {
@@ -43,7 +43,7 @@ export default function TeamVideoSection() {
   const [activeVideoId, setActiveVideoId] = useState('video2'); // Start with Stage 01
   const [isPlaying, setIsPlaying] = useState(true);
   const [isMuted, setIsMuted] = useState(true);
-  const [progress, setProgress] = useState({ video1: 0, video2: 0, video3: 0 });
+  const [isSectionVisible, setIsSectionVisible] = useState(false);
   const [activeVideoModal, setActiveVideoModal] = useState(null);
 
   const videoRefs = {
@@ -58,29 +58,60 @@ export default function TeamVideoSection() {
     video3: useRef(null)
   };
 
+  const progressRefs = {
+    video2: useRef(null),
+    video1: useRef(null),
+    video3: useRef(null)
+  };
+
   const sliderRef = useRef(null);
   const sectionRef = useRef(null);
 
-  // Synchronize playback: only activeVideoId plays
+  // IntersectionObserver: Only play videos when section is actually on screen (saves CPU/GPU)
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el || typeof window === 'undefined' || !('IntersectionObserver' in window)) {
+      setIsSectionVisible(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setIsSectionVisible(entry.isIntersecting);
+        });
+      },
+      { threshold: 0.15 }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  // Synchronize playback: only activeVideoId plays when section is visible
   useEffect(() => {
     Object.keys(videoRefs).forEach((id) => {
       const vid = videoRefs[id]?.current;
       if (!vid) return;
 
-      if (id === activeVideoId && isPlaying) {
+      if (id === activeVideoId && isPlaying && isSectionVisible) {
         vid.muted = isMuted;
         vid.play().catch(() => {
           vid.muted = true;
           setIsMuted(true);
-          vid.play().catch((e) => console.warn(e));
+          vid.play().catch(() => {});
         });
       } else {
         vid.pause();
-        vid.currentTime = 0;
-        setProgress((prev) => ({ ...prev, [id]: 0 }));
+        if (id !== activeVideoId) {
+          vid.currentTime = 0;
+          if (progressRefs[id]?.current) {
+            progressRefs[id].current.style.width = '0%';
+          }
+        }
       }
     });
-  }, [activeVideoId, isPlaying]);
+  }, [activeVideoId, isPlaying, isSectionVisible]);
 
   // Handle Mute changes
   useEffect(() => {
@@ -90,73 +121,68 @@ export default function TeamVideoSection() {
     }
   }, [isMuted, activeVideoId]);
 
-  // Sync active card on mobile swipe/scroll
+  // High performance direct DOM Time Update (Zero React Re-renders on 60fps video playback)
+  const handleTimeUpdate = useCallback((id) => {
+    const vid = videoRefs[id]?.current;
+    const bar = progressRefs[id]?.current;
+    if (!vid || !vid.duration || !bar) return;
+    const currentProg = (vid.currentTime / vid.duration) * 100;
+    bar.style.width = `${currentProg}%`;
+  }, []);
+
+  // Smooth slide to selected card (only scrolls carousel container, never jumps page)
+  const scrollToCard = useCallback((id) => {
+    setActiveVideoId(id);
+    setIsPlaying(true);
+    const cardEl = cardRefs[id]?.current;
+    const container = sliderRef.current;
+    if (cardEl && container) {
+      if (container.scrollWidth > container.clientWidth) {
+        container.scrollTo({
+          left: cardEl.offsetLeft,
+          behavior: 'smooth'
+        });
+      }
+    }
+  }, []);
+
+  // Handle mobile horizontal swipe to sync active video dot smoothly
   useEffect(() => {
-    const slider = sliderRef.current;
-    if (!slider) return;
+    const container = sliderRef.current;
+    if (!container) return;
 
     let timeoutId = null;
-    const handleScroll = () => {
-      clearTimeout(timeoutId);
+    const handleSliderScroll = () => {
+      if (timeoutId) clearTimeout(timeoutId);
       timeoutId = setTimeout(() => {
-        const sliderScrollLeft = slider.scrollLeft;
-        let closestId = activeVideoId;
-        let minDiff = Infinity;
-
-        VIDEO_LIST.forEach((item) => {
-          const cardEl = cardRefs[item.id]?.current;
-          if (cardEl) {
-            const cardLeft = cardEl.offsetLeft - slider.offsetLeft;
-            const diff = Math.abs(cardLeft - sliderScrollLeft);
-            if (diff < minDiff) {
-              minDiff = diff;
-              closestId = item.id;
-            }
-          }
-        });
-
-        if (closestId && closestId !== activeVideoId) {
-          setActiveVideoId(closestId);
+        if (container.scrollWidth <= container.clientWidth) return;
+        const scrollLeft = container.scrollLeft;
+        const cardWidth = container.clientWidth;
+        const activeIdx = Math.min(
+          VIDEO_LIST.length - 1,
+          Math.max(0, Math.round(scrollLeft / (cardWidth || 1)))
+        );
+        const activeItem = VIDEO_LIST[activeIdx];
+        if (activeItem && activeItem.id !== activeVideoId) {
+          setActiveVideoId(activeItem.id);
         }
-      }, 80);
+      }, 60);
     };
 
-    slider.addEventListener('scroll', handleScroll, { passive: true });
+    container.addEventListener('scroll', handleSliderScroll, { passive: true });
     return () => {
-      slider.removeEventListener('scroll', handleScroll);
-      clearTimeout(timeoutId);
+      container.removeEventListener('scroll', handleSliderScroll);
+      if (timeoutId) clearTimeout(timeoutId);
     };
   }, [activeVideoId]);
 
-  // Handle Video Time Update for Progress Bar
-  const handleTimeUpdate = (id) => {
-    const vid = videoRefs[id]?.current;
-    if (!vid || !vid.duration) return;
-    const currentProg = (vid.currentTime / vid.duration) * 100;
-    setProgress((prev) => ({ ...prev, [id]: currentProg }));
-  };
-
   // Auto-advance to next video when current ends
-  const handleVideoEnded = (currentId) => {
+  const handleVideoEnded = useCallback((currentId) => {
     const currentItem = VIDEO_LIST.find((v) => v.id === currentId);
     if (currentItem && currentItem.nextId) {
       scrollToCard(currentItem.nextId);
     }
-  };
-
-  // Smooth slide to selected card
-  const scrollToCard = (id) => {
-    setActiveVideoId(id);
-    setIsPlaying(true);
-    const cardEl = cardRefs[id]?.current;
-    if (cardEl && sliderRef.current) {
-      cardEl.scrollIntoView({
-        behavior: 'smooth',
-        block: 'nearest',
-        inline: 'start'
-      });
-    }
-  };
+  }, [scrollToCard]);
 
   // Next / Prev slide handlers
   const handleNext = () => {
@@ -175,7 +201,7 @@ export default function TeamVideoSection() {
       const vid = videoRefs[id]?.current;
       if (vid) {
         if (vid.paused) {
-          vid.play().then(() => setIsPlaying(true)).catch((e) => console.warn(e));
+          vid.play().then(() => setIsPlaying(true)).catch(() => {});
         } else {
           vid.pause();
           setIsPlaying(false);
@@ -202,7 +228,7 @@ export default function TeamVideoSection() {
     vid.volume = 1.0;
 
     if (vid.paused) {
-      vid.play().then(() => setIsPlaying(true)).catch((err) => console.warn(err));
+      vid.play().then(() => setIsPlaying(true)).catch(() => {});
     }
   };
 
@@ -233,7 +259,7 @@ export default function TeamVideoSection() {
         <div className="team-video-grid reveal-on-scroll" ref={sliderRef}>
           {VIDEO_LIST.map((item) => {
             const isActive = activeVideoId === item.id;
-            const isCurrentPlaying = isActive && isPlaying;
+            const isCurrentPlaying = isActive && isPlaying && isSectionVisible;
 
             return (
               <div
@@ -256,7 +282,7 @@ export default function TeamVideoSection() {
                     ref={videoRefs[item.id]}
                     src={item.src}
                     playsInline
-                    preload="auto"
+                    preload={isActive ? 'auto' : 'none'}
                     muted={isMuted}
                     defaultMuted
                     onTimeUpdate={() => handleTimeUpdate(item.id)}
@@ -330,11 +356,12 @@ export default function TeamVideoSection() {
                     <span>{item.stage} · {item.pill}</span>
                   </div>
 
-                  {/* Progress Line at bottom */}
+                  {/* Direct DOM Progress Line at bottom */}
                   <div className="video-progress-track">
                     <div
+                      ref={progressRefs[item.id]}
                       className="video-progress-bar"
-                      style={{ width: `${progress[item.id] || 0}%` }}
+                      style={{ width: '0%' }}
                     />
                   </div>
                 </div>
