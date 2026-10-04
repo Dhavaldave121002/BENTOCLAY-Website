@@ -167,11 +167,14 @@ export default function ContactPage() {
             </div>
 
             <div className="direct-details">
+              <a href="mailto:dipak@bentoclay.com">
+                <small>DIRECT SALES</small>dipak@bentoclay.com
+              </a>
               <a href={`mailto:bentoclayclaytech@gmail.com?subject=${encodeURIComponent(activeProductName ? `Inquiry: ${activeProductName}` : 'Inquiry for Bentoclay Claytech')}`}>
-                <small>EMAIL</small>bentoclayclaytech@gmail.com
+                <small>GENERAL EMAIL</small>bentoclayclaytech@gmail.com
               </a>
               <a href="tel:+917435818628">
-                <small>PHONE</small>+91 74358 18628
+                <small>PHONE / WHATSAPP</small>+91 74358 18628
               </a>
             </div>
 

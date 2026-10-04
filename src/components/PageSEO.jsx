@@ -144,7 +144,7 @@ export default function PageSEO() {
       image: `${BASE_URL}/assets/product-range.webp`,
       description: 'Bentoclay Claytech is a premier global manufacturer and Pan-India exporter of high-purity Attapulgite (Palygorskite CAS: 12174-11-7, HS Code: 25084000) clays and engineered absorbent minerals.',
       telephone: '+91-7435818628',
-      email: 'bentoclayclaytech@gmail.com',
+      email: ['dipak@bentoclay.com', 'bentoclayclaytech@gmail.com'],
       address: {
         '@type': 'PostalAddress',
         streetAddress: 'Plot No. 12/A, GIDC Industrial Estate, Kardej',

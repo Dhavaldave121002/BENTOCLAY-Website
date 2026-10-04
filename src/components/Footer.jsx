@@ -61,10 +61,17 @@ export default function Footer() {
 
         <div className="footer-contact">
           <h4>Get in touch</h4>
+          <a className="contact-line" href="mailto:dipak@bentoclay.com">
+            <i>✉</i>
+            <span>
+              <small>DIRECT SALES EMAIL</small>
+              dipak@bentoclay.com
+            </span>
+          </a>
           <a className="contact-line" href="mailto:bentoclayclaytech@gmail.com">
             <i>✉</i>
             <span>
-              <small>EMAIL US</small>
+              <small>GENERAL INQUIRIES</small>
               bentoclayclaytech@gmail.com
             </span>
           </a>
