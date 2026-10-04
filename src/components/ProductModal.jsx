@@ -94,9 +94,16 @@ export default function ProductModal({ product, onClose }) {
               Request Quote for {product.shortName} ↗
             </Link>
             {product.pdsName && (
-              <span className="pds-badge">
-                📄 Published PDS Available: {product.pdsName}
-              </span>
+              <a
+                href={`/pds/${product.pdsName}`}
+                download={product.pdsName}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="pds-badge pds-link-btn"
+                title={`Download Official ${product.name} Published PDS (PDF)`}
+              >
+                📄 Download Published PDS (PDF) ↓
+              </a>
             )}
           </div>
 

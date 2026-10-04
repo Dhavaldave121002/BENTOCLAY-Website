@@ -101,8 +101,12 @@ export default function ProductDetailPage() {
                   Customize this Grade <span>⚙</span>
                 </button>
                 <a
-                  href={`mailto:bentoclayclaytech@gmail.com?subject=PDS%20Request%3A%20${encodeURIComponent(product.name)}`}
+                  href={`/pds/${product.pdsName || 'PDS-' + product.id + '.pdf'}`}
+                  download={product.pdsName || `${product.slug}-pds.pdf`}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="btn btn-outline-light"
+                  title={`Download Official ${product.name} Published Product Data Sheet (PDF)`}
                 >
                   Download PDS <span>↓</span>
                 </a>
@@ -217,6 +221,27 @@ export default function ProductDetailPage() {
                   <em>Standard Note:</em> {product.specNote}
                 </p>
               )}
+
+              {/* Official PDS PDF Download Banner */}
+              <div className="pds-download-card">
+                <div className="pds-download-info">
+                  <span className="pds-icon">📄</span>
+                  <div>
+                    <strong>Official Published Product Data Sheet (PDS)</strong>
+                    <span>Verified laboratory parameters, chemical composition & packaging specs</span>
+                  </div>
+                </div>
+                <a
+                  href={`/pds/${product.pdsName || 'PDS-' + product.id + '.pdf'}`}
+                  download={product.pdsName || `${product.slug}-pds.pdf`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-primary btn-sm"
+                  title={`Download Official ${product.name} PDF Data Sheet`}
+                >
+                  Download {product.shortName} PDS (PDF) ↓
+                </a>
+              </div>
             </div>
 
             {/* Typical Applications */}
