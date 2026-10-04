@@ -369,18 +369,16 @@ export default function TeamVideoSection() {
           >
             ‹
           </button>
-          <div className="video-dots-row">
+          <div className="video-dots-row" role="tablist" aria-label="Video Slides">
             {VIDEO_LIST.map((item, idx) => (
               <button
                 key={item.id}
                 type="button"
                 className={`video-dot-btn ${activeVideoId === item.id ? 'active' : ''}`}
                 onClick={() => scrollToCard(item.id)}
-                aria-label={`Slide to Stage ${idx + 1}`}
-              >
-                <span className="dot-num">{idx + 1}</span>
-                <span className="dot-label">{item.pill}</span>
-              </button>
+                aria-label={`Slide ${idx + 1}: ${item.pill}`}
+                title={`Stage ${idx + 1}: ${item.pill}`}
+              />
             ))}
           </div>
           <button
