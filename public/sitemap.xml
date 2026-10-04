@@ -55,7 +55,7 @@
     <priority>0.50</priority>
   </url>
 
-  <!-- Product Detail Pages (6 Core Grades) -->
+  <!-- Product Detail Pages (6 Core Attapulgite Mineral Grades) -->
   <url>
     <loc>https://bentoclay.com/products/salt-gel-attapulgite-powder</loc>
     <lastmod>2026-10-04</lastmod>
@@ -67,7 +67,7 @@
     </image:image>
   </url>
   <url>
-    <loc>https://bentoclay.com/products/api-13a-attapulgite-powder</loc>
+    <loc>https://bentoclay.com/products/api-13a-section-12-attapulgite-powder</loc>
     <lastmod>2026-10-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
@@ -77,7 +77,7 @@
     </image:image>
   </url>
   <url>
-    <loc>https://bentoclay.com/products/natural-attapulgite-powder</loc>
+    <loc>https://bentoclay.com/products/attapulgite-natural-powder</loc>
     <lastmod>2026-10-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
@@ -87,7 +87,7 @@
     </image:image>
   </url>
   <url>
-    <loc>https://bentoclay.com/products/flux-fine-200-foundry-flux-powder</loc>
+    <loc>https://bentoclay.com/products/flux-fine-200-attapulgite-powder</loc>
     <lastmod>2026-10-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
@@ -107,7 +107,7 @@
     </image:image>
   </url>
   <url>
-    <loc>https://bentoclay.com/products/natural-attapulgite-granules-1-5mm</loc>
+    <loc>https://bentoclay.com/products/attapulgite-natural-granules-1-5mm</loc>
     <lastmod>2026-10-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
