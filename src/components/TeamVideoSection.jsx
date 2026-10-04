@@ -42,7 +42,6 @@ const VIDEO_LIST = [
 export default function TeamVideoSection() {
   const [activeVideoId, setActiveVideoId] = useState('video2'); // Start with Stage 01
   const [isPlaying, setIsPlaying] = useState(true);
-  const [isMuted, setIsMuted] = useState(true);
   const [isSectionVisible, setIsSectionVisible] = useState(false);
   const [activeVideoModal, setActiveVideoModal] = useState(null);
 
@@ -88,19 +87,16 @@ export default function TeamVideoSection() {
     return () => observer.disconnect();
   }, []);
 
-  // Synchronize playback: only activeVideoId plays when section is visible
+  // Synchronize playback: only activeVideoId plays when section is visible (100% Permanently Muted)
   useEffect(() => {
     Object.keys(videoRefs).forEach((id) => {
       const vid = videoRefs[id]?.current;
       if (!vid) return;
 
       if (id === activeVideoId && isPlaying && isSectionVisible) {
-        vid.muted = isMuted;
-        vid.play().catch(() => {
-          vid.muted = true;
-          setIsMuted(true);
-          vid.play().catch(() => {});
-        });
+        vid.muted = true;
+        vid.defaultMuted = true;
+        vid.play().catch(() => {});
       } else {
         vid.pause();
         if (id !== activeVideoId) {
@@ -112,14 +108,6 @@ export default function TeamVideoSection() {
       }
     });
   }, [activeVideoId, isPlaying, isSectionVisible]);
-
-  // Handle Mute changes
-  useEffect(() => {
-    const vid = videoRefs[activeVideoId]?.current;
-    if (vid) {
-      vid.muted = isMuted;
-    }
-  }, [isMuted, activeVideoId]);
 
   // High performance direct DOM Time Update (Zero React Re-renders on 60fps video playback)
   const handleTimeUpdate = useCallback((id) => {
@@ -212,26 +200,6 @@ export default function TeamVideoSection() {
     }
   };
 
-  // Sound toggle button click
-  const handleToggleMute = (e, id) => {
-    e.stopPropagation();
-    const vid = videoRefs[id]?.current;
-    if (!vid) return;
-
-    if (activeVideoId !== id) {
-      scrollToCard(id);
-    }
-
-    const nextMute = !isMuted;
-    setIsMuted(nextMute);
-    vid.muted = nextMute;
-    vid.volume = 1.0;
-
-    if (vid.paused) {
-      vid.play().then(() => setIsPlaying(true)).catch(() => {});
-    }
-  };
-
   // Expand modal
   const handleExpand = (e, src, title) => {
     e.stopPropagation();
@@ -283,7 +251,7 @@ export default function TeamVideoSection() {
                     src={item.src}
                     playsInline
                     preload={isActive ? 'auto' : 'none'}
-                    muted={isMuted}
+                    muted
                     defaultMuted
                     onTimeUpdate={() => handleTimeUpdate(item.id)}
                     onEnded={() => handleVideoEnded(item.id)}
@@ -299,30 +267,8 @@ export default function TeamVideoSection() {
                     Your browser does not support HTML5 video.
                   </video>
 
-                  {/* Top Controls: Sound & Expand */}
+                  {/* Top Controls: Expand Fullscreen */}
                   <div className="video-top-controls" onClick={(e) => e.stopPropagation()}>
-                    <button
-                      type="button"
-                      className={`video-control-btn sound-btn ${!isMuted && isActive ? 'sound-active' : ''}`}
-                      onClick={(e) => handleToggleMute(e, item.id)}
-                      aria-label={isMuted ? 'Turn Sound ON' : 'Turn Sound OFF'}
-                      title={isMuted ? 'Click for Sound 🔊' : 'Mute Sound 🔇'}
-                    >
-                      {!isMuted && isActive ? (
-                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor" />
-                          <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
-                          <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
-                        </svg>
-                      ) : (
-                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor" />
-                          <line x1="23" y1="9" x2="17" y2="15" />
-                          <line x1="17" y1="9" x2="23" y2="15" />
-                        </svg>
-                      )}
-                    </button>
-
                     <button
                       type="button"
                       className="video-control-btn"
