@@ -8678,3 +8678,71 @@ h2 span {
   border-left: 4px solid var(--gold) !important;
   background: linear-gradient(135deg, #fdfbf7 0%, #f6efe3 100%) !important;
 }
+
+/* ── Instant WhatsApp & Direct Call Buttons Grid ── */
+.instant-whatsapp-wrap {
+  margin-top: 14px;
+}
+
+.instant-contact-actions-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.btn-whatsapp-instant {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #25d366;
+  color: #ffffff;
+  padding: 12px 14px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 13px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 3px 10px rgba(37, 211, 102, 0.28);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  text-decoration: none;
+}
+
+.btn-whatsapp-instant:hover {
+  background: #20ba5a;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(37, 211, 102, 0.4);
+}
+
+.btn-call-direct {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #80502e;
+  color: #ffffff;
+  padding: 12px 14px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 13px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 3px 10px rgba(128, 80, 46, 0.25);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  text-decoration: none;
+}
+
+.btn-call-direct:hover {
+  background: #673d20;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(128, 80, 46, 0.38);
+}
+
+@media (max-width: 480px) {
+  .instant-contact-actions-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+}
