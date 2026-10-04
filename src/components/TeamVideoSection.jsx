@@ -258,6 +258,7 @@ export default function TeamVideoSection() {
                     playsInline
                     preload="auto"
                     muted={isMuted}
+                    defaultMuted
                     onTimeUpdate={() => handleTimeUpdate(item.id)}
                     onEnded={() => handleVideoEnded(item.id)}
                     onPlay={() => {
@@ -414,6 +415,8 @@ export default function TeamVideoSection() {
                 src={activeVideoModal.src}
                 controls
                 autoPlay
+                muted
+                defaultMuted
                 playsInline
               >
                 Your browser does not support video.
