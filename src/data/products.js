@@ -13,7 +13,7 @@ export const products = [
       "drilling",
       "industrial"
     ],
-    "image": "/assets/product-images/Attapulgite Salt Gel Grade Powder.webp",
+    "image": "/assets/product-images/Attapulgite Salt Gel Grade Powder.webp?v=3",
     "desc": "Viscosity building in high-salt, high-pressure and high-temperature drilling fluids.",
     "tagline": "Viscosity building in high-salt, high-pressure and high-temperature drilling fluids.",
     "inShort": "Salt gel attapulgite powder is a needle-structured hydrous magnesium aluminosilicate ground to a gel grade that builds and holds viscosity in saline drilling fluids. The Bentoclay Claytech grade is supplied to a minimum suspension viscosity of 35 cps (dial reading at 600 rpm), maximum 4% residue greater than 75 micrometers and maximum 8% moisture, in 25 kg HDPE bags with liner.",
@@ -119,7 +119,7 @@ export const products = [
     "categories": [
       "drilling"
     ],
-    "image": "/assets/product-images/Attapulgite Powder API-13A Section 12 Grade.webp",
+    "image": "/assets/product-images/Attapulgite Powder API-13A Section 12 Grade.webp?v=3",
     "desc": "Drilling grade attapulgite matching API Specification parameters for saline conditions.",
     "tagline": "Drilling grade attapulgite matching API Specification parameters for saline conditions.",
     "inShort": "API-13A Section 12 attapulgite is the drilling grade of attapulgite clay whose physical parameters match the API specification for drilling in saline conditions. The Bentoclay Claytech grade is controlled to 30 cps minimum viscosity dial reading at 600 rpm, maximum 8% residue greater than 75 micrometers and maximum 16% moisture, verified on a composite sample representing no more than one day of production.",
@@ -223,7 +223,7 @@ export const products = [
       "natural",
       "industrial"
     ],
-    "image": "/assets/product-images/Attapulgite Natural Powder.webp",
+    "image": "/assets/product-images/Attapulgite Natural Powder.webp?v=3",
     "desc": "High-absorbency natural attapulgite powder with a full chemical and physical test report.",
     "tagline": "High-absorbency natural attapulgite powder with a full chemical and physical test report.",
     "inShort": "Natural attapulgite powder is an unmodified, non-swelling clay powder with a rod-like crystal structure, high liquid absorption and suspension capability. Bentoclay Claytech reports an off-white powder at 10.4% moisture, pH 7.6, specific gravity 2.39, SiO2 40.2%, Al2O3 6.2%, Fe2O3 4.6%, CaO 4.8%, MgO 8.42% and LOI 24.2%, supplied in 25 kg HDPE bags with liner.",
@@ -367,7 +367,7 @@ export const products = [
     "categories": [
       "industrial"
     ],
-    "image": "/assets/product-images/Attapulgite Flux Fine-200 (Foundry Flux) Powder.webp",
+    "image": "/assets/product-images/Attapulgite Flux Fine-200 (Foundry Flux) Powder.webp?v=3",
     "desc": "Foundry flux grade with specified swelling index, FSV and 200 mesh fineness.",
     "tagline": "Foundry flux grade with specified swelling index, FSV and 200 mesh fineness.",
     "inShort": "Attapulgite Flux Fine-200 is a foundry flux grade attapulgite powder used as a foundry blending material for its binding and thermal stability. Bentoclay Claytech specifies swelling index of 95 ml minimum at 1 hour and 85 ml minimum at 24 hours, FSV 12–14 ml, 200 mesh (wet) 98% max, pH 6.5–8.5 and moisture 8–12%, in 25 kg HDPE bags with liner.",
@@ -528,7 +528,7 @@ export const products = [
     "categories": [
       "industrial"
     ],
-    "image": "/assets/product-images/Attapulgite Premium 325 Powder.webp",
+    "image": "/assets/product-images/Attapulgite Premium 325 Powder.webp?v=3",
     "desc": "Premium fine powder for thickening and suspension in paints, coatings, sealants and adhesives.",
     "tagline": "Premium fine powder for thickening and suspension in paints, coatings, sealants and adhesives.",
     "inShort": "Premium 325 is the finest attapulgite powder grade from Bentoclay Claytech, used as a rheology additive for thickening and suspension. It is specified at 325 mesh (wet) 98.5% max, BET surface area 210 m²/g ±10%",
@@ -702,7 +702,7 @@ export const products = [
     "categories": [
       "natural"
     ],
-    "image": "/assets/product-images/Attapulgite Natural Granules 1 to 5 mm.webp",
+    "image": "/assets/product-images/Attapulgite Natural Granules 1 to 5 mm.webp?v=3",
     "desc": "Low-dust, non-swelling absorbent granules for litter, absorbents and carriers.",
     "tagline": "Low-dust, non-swelling absorbent granules for litter, absorbents and carriers.",
     "inShort": "Attapulgite natural granules are porous 1-5 mm ball granules of processed magnesium aluminium silicate clay with high liquid absorption, low dust and non-swelling behaviour. Bentoclay Claytech reports off-white granules at 5.6% moisture, pH 7.6, specific gravity 2.46 and 2.6% under/oversize against a 5% limit, in 25 kg HDPE bags with liner.",
