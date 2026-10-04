@@ -45,7 +45,7 @@ const PDS_DATA = [
     hasResultColumn: false,
     params: [
       { param: 'Suspension properties\nViscosity dial reading at 600 rpm', req: '35 cps minimum' },
-      { param: 'Residue greater than 75micrometers', req: '4% maximum' },
+      { param: 'Residue greater than 75 micrometers', req: '4% maximum' },
       { param: 'Moisture', req: '8% maximum' }
     ],
     applications: [
@@ -177,12 +177,20 @@ const PDS_DATA = [
 
 async function createPDS(data) {
   const doc = await PDFDocument.create();
-  const page = doc.addPage([595.28, 841.89]); // A4 Size
+  const page = doc.addPage([595.28, 841.89]); // A4 Size (595.28 x 841.89 pt)
   const { width, height } = page.getSize();
 
   const fontRegular = await doc.embedFont(StandardFonts.Helvetica);
   const fontBold = await doc.embedFont(StandardFonts.HelveticaBold);
   const fontOblique = await doc.embedFont(StandardFonts.HelveticaOblique);
+
+  // Load and embed official Bentoclay Logo PNG
+  const logoPath = path.resolve(process.cwd(), 'public', 'assets', 'bentoclay-logo.png');
+  let logoImage = null;
+  if (fs.existsSync(logoPath)) {
+    const logoBytes = fs.readFileSync(logoPath);
+    logoImage = await doc.embedPng(logoBytes);
+  }
 
   // Colors
   const darkInk = rgb(0.12, 0.1, 0.08);
@@ -191,49 +199,75 @@ async function createPDS(data) {
   const tableHeaderBg = rgb(0.98, 0.88, 0.82);
   const tableRowEven = rgb(0.99, 0.97, 0.95);
   const borderGray = rgb(0.75, 0.7, 0.65);
-  const lightGray = rgb(0.4, 0.4, 0.4);
+  const lightGray = rgb(0.38, 0.38, 0.38);
 
-  let y = height - 40;
+  let y = height - 42;
 
-  // Header Title
+  // Header Right: Title & Subtitle
   page.drawText(data.title, {
-    x: width - 200,
+    x: width - 210,
     y: y,
-    size: 14,
+    size: 15,
     font: fontBold,
     color: darkInk
   });
   page.drawText(data.subtitle, {
-    x: width - 200,
-    y: y - 14,
-    size: 10,
+    x: width - 210,
+    y: y - 15,
+    size: 10.5,
     font: fontRegular,
     color: lightGray
   });
 
-  // Company Logo & Brand (Bentoclay Claytech)
-  page.drawText('Bentoclay Claytech', {
-    x: 45,
-    y: y - 10,
-    size: 20,
-    font: fontBold,
-    color: darkInk
-  });
-  page.drawText('Manufactures of Attapulgite Powder', {
-    x: 45,
-    y: y - 24,
-    size: 9.5,
-    font: fontRegular,
-    color: lightGray
-  });
+  // Header Left: Logo + Company Name
+  if (logoImage) {
+    const logoDims = logoImage.scale(0.048); // scale down crisp logo
+    page.drawImage(logoImage, {
+      x: 45,
+      y: y - logoDims.height + 4,
+      width: logoDims.width,
+      height: logoDims.height
+    });
 
-  y -= 52;
+    const textX = 45 + logoDims.width + 12;
+    page.drawText('Bentoclay Claytech', {
+      x: textX,
+      y: y - 4,
+      size: 18,
+      font: fontBold,
+      color: darkInk
+    });
+    page.drawText('Manufactures of Attapulgite Powder', {
+      x: textX,
+      y: y - 18,
+      size: 9.5,
+      font: fontRegular,
+      color: lightGray
+    });
+  } else {
+    page.drawText('Bentoclay Claytech', {
+      x: 45,
+      y: y - 4,
+      size: 19,
+      font: fontBold,
+      color: darkInk
+    });
+    page.drawText('Manufactures of Attapulgite Powder', {
+      x: 45,
+      y: y - 18,
+      size: 9.5,
+      font: fontRegular,
+      color: lightGray
+    });
+  }
+
+  y -= 54;
 
   // Horizontal separator line
   page.drawLine({
     start: { x: 45, y: y },
     end: { x: width - 45, y: y },
-    thickness: 1,
+    thickness: 1.2,
     color: rgb(0.85, 0.85, 0.85)
   });
 
@@ -305,7 +339,6 @@ async function createPDS(data) {
 
   const descParagraphs = data.desc.split('\n\n');
   for (const para of descParagraphs) {
-    // Word wrap paragraph
     const words = para.split(' ');
     let currentLine = '';
     for (const w of words) {
@@ -356,7 +389,7 @@ async function createPDS(data) {
   const col1W = data.hasResultColumn ? tableWidth * 0.45 : tableWidth * 0.55;
   const col2W = data.hasResultColumn ? tableWidth * 0.30 : tableWidth * 0.45;
   const col3W = data.hasResultColumn ? tableWidth * 0.25 : 0;
-  const rowHeight = 16.5;
+  const rowHeight = 16;
 
   // Table Header Box
   page.drawRectangle({
@@ -486,24 +519,24 @@ async function createPDS(data) {
     color: darkInk
   });
 
-  // Footer (Fixed at Bottom of Page)
+  // Footer (Fixed at Bottom of Page with exact website contact info: 2 emails, mobile & address)
   const footerY = 48;
   page.drawLine({
-    start: { x: 45, y: footerY + 22 },
-    end: { x: width - 45, y: footerY + 22 },
-    thickness: 0.8,
+    start: { x: 45, y: footerY + 24 },
+    end: { x: width - 45, y: footerY + 24 },
+    thickness: 1,
     color: rgb(0.85, 0.85, 0.85)
   });
 
-  page.drawText('Address: - L. S-341/P-2, Behind Manpasand Dhaba, Vallabhipur Highway, Kardej, Bhavnagar, 364060', {
+  page.drawText('Address: - L.S. 341/P-2, Behind Manpasand Dhaba, Vallabhipur Highway, Kardej, Bhavnagar – 364060, Gujarat, India', {
     x: 45,
-    y: footerY + 10,
-    size: 8,
+    y: footerY + 11,
+    size: 7.8,
     font: fontRegular,
     color: rgb(0.3, 0.3, 0.3)
   });
 
-  page.drawText('Email: info@bentoclay.com, dipak@bentoclay.com', {
+  page.drawText('Email: dipak@bentoclay.com  |  bentoclayclaytech@gmail.com', {
     x: 45,
     y: footerY - 1,
     size: 8,
@@ -511,7 +544,7 @@ async function createPDS(data) {
     color: brandGold
   });
 
-  page.drawText('Contact: - +91 74358 18628  |  Website: https://bentoclay.com', {
+  page.drawText('Contact: +91 74358 18628  |  Website: https://bentoclay.com', {
     x: 320,
     y: footerY - 1,
     size: 8,
@@ -534,10 +567,10 @@ async function run() {
     const publicRootPath = path.resolve(process.cwd(), 'public', item.filename);
     fs.writeFileSync(outPath, pdfBytes);
     fs.writeFileSync(publicRootPath, pdfBytes);
-    console.log(`✓ Generated ${item.filename} (${(pdfBytes.length / 1024).toFixed(1)} KB)`);
+    console.log(`✓ Generated ${item.filename} with logo and verified contacts (${(pdfBytes.length / 1024).toFixed(1)} KB)`);
   }
 
-  console.log('All 6 PDS PDFs generated perfectly!');
+  console.log('All 6 PDS PDFs generated with logo and exact website contacts!');
 }
 
 run().catch(console.error);
