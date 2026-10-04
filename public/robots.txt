@@ -1,0 +1,38 @@
+# Robots.txt for Bentoclay Claytech (https://bentoclay.com)
+# All search engines and AI crawlers are welcomed to index technical data, specifications, and articles.
+
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /api/private/
+
+# AI Crawlers (AIO / GEO Optimization)
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Cohere-ai
+Allow: /
+
+# Canonical XML Sitemap
+Sitemap: https://bentoclay.com/sitemap.xml
